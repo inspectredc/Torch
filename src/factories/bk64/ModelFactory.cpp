@@ -124,7 +124,7 @@ std::optional<std::shared_ptr<IParsedData>> ModelFactory::parse(std::vector<uint
     uint16_t textureCount;
     
     if (geoLayoutOffset != 0) {
-        SPDLOG_ERROR("HAS GL {}", symbol);
+        SPDLOG_INFO("HAS GL {}", symbol);
         YAML::Node geoLayout;
         geoLayout["type"] = "BK64:GEO_LAYOUT";
         geoLayout["offset"] = modelOffset + geoLayoutOffset;
@@ -413,7 +413,7 @@ std::optional<std::shared_ptr<IParsedData>> ModelFactory::parse(std::vector<uint
     }
 
     if (modelUnk28Offset != 0) {
-        SPDLOG_ERROR("HAS UNK 28");
+        SPDLOG_INFO("HAS UNK 28");
         reader.Seek(modelOffset + modelUnk20Offset, LUS::SeekOffsetType::Start);
         auto count = reader.ReadInt16();
         reader.ReadInt16(); // pad

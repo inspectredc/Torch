@@ -101,7 +101,7 @@ std::optional<std::shared_ptr<IParsedData>> DemoInputFactory::parse(std::vector<
     reader.SetEndianness(Torch::Endianness::Big);
     const auto symbol = GetSafeNode<std::string>(node, "symbol");
 
-    SPDLOG_ERROR("START SYMBOL {}", symbol);
+    SPDLOG_INFO("START SYMBOL {}", symbol);
 
     if (segment.size < 4) {
         return std::make_shared<DemoInputData>(std::vector<ControllerInput>());
