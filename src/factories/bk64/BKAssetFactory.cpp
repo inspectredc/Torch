@@ -178,31 +178,31 @@ std::optional<std::shared_ptr<IParsedData>> BKAssetFactory::parse(std::vector<ui
                 break;
             case BKAssetType::DemoInput:
                 bkAssetNode["type"] = "BK64:DEMO";
-                // Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
+                Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
                 break;
             case BKAssetType::Dialog:
                 bkAssetNode["type"] = "BK64:DIALOG";
-                // Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
+                Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
                 break;
             case BKAssetType::GruntyQuestion:
                 bkAssetNode["type"] = "BK64:GRUNTYQ";
-                // Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
+                Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
                 break;
             case BKAssetType::LevelSetup:
                 bkAssetNode["type"] = "BK64:LEVEL_SETUP";
-                // Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
+                Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
                 break;
             case BKAssetType::Midi:
-                bkAssetNode["type"] = "BK64:MIDI";
-                // Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
+                bkAssetNode["type"] = "BLOB";
+                Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
                 break;
             case BKAssetType::Model:
                 bkAssetNode["type"] = "BK64:MODEL";
-                // Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
+                Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
                 break;
             case BKAssetType::QuizQuestion:
                 bkAssetNode["type"] = "BK64:QUIZQ";
-                // Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
+                Companion::Instance->AddSubFileAsset(bkAssetNode, assetSymbol, compressionType, assetSize);
                 break;
             case BKAssetType::Sprite:
                 bkAssetNode["type"] = "BK64:SPRITE";
