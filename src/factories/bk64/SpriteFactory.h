@@ -11,9 +11,12 @@ namespace BK64 {
 
 class SpriteData : public IParsedData {
 public:
+    int16_t mFrameCount;
+    int16_t mFormatCode;
     std::vector<uint16_t> mChunkCounts;
+    std::vector<std::pair<int16_t, int16_t>> mPositions;
 
-    SpriteData(std::vector<uint16_t> chunkCounts) : mChunkCounts(std::move(chunkCounts)) {}
+    SpriteData(int16_t frameCount, int16_t formatCode, std::vector<uint16_t> chunkCounts, std::vector<std::pair<int16_t, int16_t>> positions) : mFrameCount(frameCount), mFormatCode(formatCode), mChunkCounts(std::move(chunkCounts)), mPositions(std::move(positions)) {}
 };
 
 class SpriteHeaderExporter : public BaseExporter {
