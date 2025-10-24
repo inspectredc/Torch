@@ -254,6 +254,24 @@ if(USE_STANDALONE)
 
 	FetchContent_MakeAvailable(spdlog)
 	target_link_libraries(${PROJECT_NAME} PRIVATE spdlog)
+
+	if (MSVC)
+		FetchContent_Declare(
+			zlib
+			GIT_REPOSITORY "https://github.com/madler/zlib.git"
+			GIT_TAG v1.3.1
+			FIND_PACKAGE_ARGS NAMES ZLIB
+		)
+		FetchContent_MakeAvailable(zlib)
+		set(ZLIB_INCLUDE_DIRS ${zlib_SOURCE_DIR})
+		set(ZLIB_LIBRARY zlibstatic CACHE STRING "")
+		set(ZLIB_LIBRARIES ${ZLIB_LIBRARY})
+		set(ZLIB_FOUND 1)
+		add_library(ZLIB::ZLIB ALIAS zlibstatic)
+	else ()
+		find_package(ZLIB REQUIRED)
+		target_link_libraries(${PROJECT_NAME} PRIVATE ZLIB::ZLIB)
+	endif()
 else()
 	find_package(spdlog QUIET)
     if(NOT spdlog_FOUND)
