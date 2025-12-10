@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <utility>
-#include "zlib.h"
+#include <zlib.h>
 #include "bk_unzip.h"
 
 namespace BK64 {
