@@ -88,7 +88,14 @@ ExportResult BK64::ModelBinaryExporter::Export(std::ostream& write, std::shared_
     auto writer = LUS::BinaryWriter();
     const auto model = std::static_pointer_cast<ModelData>(raw);
 
+    WriteHeader(writer, Torch::ResourceType::BKModel, 0);
     
+    auto wrapper = Companion::Instance->GetCurrentWrapper();
+
+    writer.Write(1);
+
+    writer.Finish(write);
+
     return std::nullopt;
 }
 

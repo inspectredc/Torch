@@ -67,7 +67,8 @@ enum class ResourceType {
 
     // BK64
     BKSprite = 0x424B5350,          // BKSP
-    BKAnimation = 0x424B414E,       // BKAN  
+    BKAnimation = 0x424B414E,       // BKAN
+    BKModel = 0x424B4D4F,           // BKMO  
     BKDemoInput = 0x424B4449,       // BKDI
     BKDialog = 0x424B444C,          // BKDL
     BKGruntyQuestion = 0x424B4751,  // BKGQ
