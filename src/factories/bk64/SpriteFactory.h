@@ -9,14 +9,27 @@
 
 namespace BK64 {
 
+typedef struct FrameHeader {
+    int16_t x;
+    int16_t y;
+    int16_t width;
+    int16_t height;
+    int16_t chunkCount;
+    int16_t unkA;
+    int16_t unkC;
+    int16_t unkE;
+    int16_t unk10;
+    int16_t unk12;
+} FrameHeader; // size = 0x14
+
 class SpriteData : public IParsedData {
 public:
     int16_t mFrameCount;
     int16_t mFormatCode;
-    std::vector<uint16_t> mChunkCounts;
+    std::vector<FrameHeader> mFrameHeaders;
     std::vector<std::pair<int16_t, int16_t>> mPositions;
 
-    SpriteData(int16_t frameCount, int16_t formatCode, std::vector<uint16_t> chunkCounts, std::vector<std::pair<int16_t, int16_t>> positions) : mFrameCount(frameCount), mFormatCode(formatCode), mChunkCounts(std::move(chunkCounts)), mPositions(std::move(positions)) {}
+    SpriteData(int16_t frameCount, int16_t formatCode, std::vector<FrameHeader> frameHeaders, std::vector<std::pair<int16_t, int16_t>> positions) : mFrameCount(frameCount), mFormatCode(formatCode), mFrameHeaders(std::move(frameHeaders)), mPositions(std::move(positions)) {}
 };
 
 class SpriteHeaderExporter : public BaseExporter {

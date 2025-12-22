@@ -106,15 +106,25 @@ ExportResult SpriteBinaryExporter::Export(std::ostream &write, std::shared_ptr<I
     
     auto wrapper = Companion::Instance->GetCurrentWrapper();
 
+    writer.Write(sprites->mFrameCount);
     writer.Write(sprites->mFormatCode);
     writer.Write((uint32_t)sprites->mPositions.size());
     for (auto position : sprites->mPositions) {
         writer.Write(position.first);
         writer.Write(position.second);
     }
-    writer.Write((uint32_t)sprites->mChunkCounts.size());
-    for (auto chunkCount : sprites->mChunkCounts) {
-        writer.Write(chunkCount);
+    writer.Write((uint32_t)sprites->mFrameHeaders.size());
+    for (auto frameHeader : sprites->mFrameHeaders) {
+        writer.Write(frameHeader.x);
+        writer.Write(frameHeader.y);
+        writer.Write(frameHeader.width);
+        writer.Write(frameHeader.height);
+        writer.Write(frameHeader.chunkCount);
+        writer.Write(frameHeader.unkA);
+        writer.Write(frameHeader.unkC);
+        writer.Write(frameHeader.unkE);
+        writer.Write(frameHeader.unk10);
+        writer.Write(frameHeader.unk12);
         // TODO: write texture hashes?
     }
 
@@ -172,14 +182,14 @@ std::optional<std::shared_ptr<IParsedData>> SpriteFactory::parse(std::vector<uin
             return std::nullopt;
     }
 
-    std::vector<uint16_t> chunkCounts;
+    std::vector<FrameHeader> frameHeaders;
     std::vector<std::pair<int16_t, int16_t>> positions;
 
     if (frameCount > 0x100) {
         offset = spriteOffset + 8;
         std::string texSymbol = symbol + "_0_";
         ExtractChunk(reader, positions, offset, "RGBA16", texSymbol, 0);
-        return std::make_shared<SpriteData>(frameCount, formatCode, chunkCounts, positions);
+        return std::make_shared<SpriteData>(frameCount, formatCode, frameHeaders, positions);
     }
 
     reader.Seek(0x10, LUS::SeekOffsetType::Start);
@@ -192,21 +202,21 @@ std::optional<std::shared_ptr<IParsedData>> SpriteFactory::parse(std::vector<uin
     for (const auto &frameOffset : offsets) {
         offset = spriteOffset + 0x10 + frameOffset + frameCount * sizeof(uint32_t);
         reader.Seek(offset - spriteOffset, LUS::SeekOffsetType::Start);
-        int16_t x = reader.ReadInt16();
-        int16_t y = reader.ReadInt16();
-        int16_t width = reader.ReadInt16();
-        int16_t height = reader.ReadInt16();
-        uint16_t chunkCount = reader.ReadInt16();
-        // TODO: Figure out the rest of the frame header
-        reader.ReadInt16(); // pad?
-        auto unkC = reader.ReadInt16();
-        auto unkE = reader.ReadInt16();
-        auto unk10 = reader.ReadInt16();
-        auto unk12 = reader.ReadInt16();
+        FrameHeader frameHeader;
+        frameHeader.x = reader.ReadInt16();
+        frameHeader.y = reader.ReadInt16();
+        frameHeader.width = reader.ReadInt16();
+        frameHeader.height = reader.ReadInt16();
+        frameHeader.chunkCount = reader.ReadInt16();
+        frameHeader.unkA = reader.ReadInt16();
+        frameHeader.unkC = reader.ReadInt16();
+        frameHeader.unkE = reader.ReadInt16();
+        frameHeader.unk10 = reader.ReadInt16();
+        frameHeader.unk12 = reader.ReadInt16();
 
-        offset += 0x14;
+        offset += sizeof(FrameHeader);
 
-        chunkCounts.push_back(chunkCount);
+        frameHeaders.push_back(frameHeader);
         
         if (format == "CI4" || format == "CI8") {
             offset = ALIGN8(offset);
@@ -224,14 +234,14 @@ std::optional<std::shared_ptr<IParsedData>> SpriteFactory::parse(std::vector<uin
             offset += colors * sizeof(int16_t);
         }
 
-        for (uint16_t i = 0; i < chunkCount; i++) {
+        for (uint16_t i = 0; i < frameHeader.chunkCount; i++) {
             std::string texSymbol = symbol + "_" + std::to_string(frame) + "_";
             ExtractChunk(reader, positions, offset, format, texSymbol, i);
         }
         frame++;
     }
 
-    return std::make_shared<SpriteData>(frameCount, formatCode, chunkCounts, positions);
+    return std::make_shared<SpriteData>(frameCount, formatCode, frameHeaders, positions);
 }
 
 } // namespace BK64
